@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 246 247 251; --panel: 255 255 255; --panel2: 240 242 248; --border: 223 227 238;
+  --fg: 17 20 34; --muted: 98 107 134; --violet: 124 58 237; --cyan: 8 145 178;
+  --ok: 5 150 105; --warn: 217 119 6; --bad: 220 38 38;
+}
+.dark {
+  --bg: 11 13 23; --panel: 17 20 34; --panel2: 24 28 46; --border: 38 43 66;
+  --fg: 233 236 245; --muted: 138 146 173; --violet: 139 92 246; --cyan: 34 211 238;
+  --ok: 52 211 153; --warn: 251 191 36; --bad: 248 113 113;
+}
+html, body, #root { height: 100%; }
+body { @apply bg-bg text-fg font-sans antialiased; }
+* { border-color: rgb(var(--border)); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgb(var(--border)); border-radius: 8px; }
+.react-flow__attribution { display: none; }
+.react-flow__controls button { background: rgb(var(--panel2)); color: rgb(var(--fg)); border-color: rgb(var(--border)); }
+.react-flow__minimap { background: rgb(var(--panel)) !important; }
+.react-flow__edge-path { stroke: rgb(var(--muted)); }
