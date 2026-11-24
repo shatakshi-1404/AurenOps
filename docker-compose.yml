@@ -1,0 +1,28 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment: { POSTGRES_USER: auren, POSTGRES_PASSWORD: auren, POSTGRES_DB: aurenops }
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U auren"], interval: 5s, retries: 10 }
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+  api:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://auren:auren@db:5432/aurenops
+      REDIS_URL: redis://redis:6379/0
+    depends_on: { db: { condition: service_healthy }, redis: { condition: service_started } }
+    ports: ["8000:8000"]
+  worker:
+    build: ./backend
+    command: celery -A app.workers.celery_app.celery worker -B -l info -c 2
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://auren:auren@db:5432/aurenops
+      REDIS_URL: redis://redis:6379/0
+    depends_on: { db: { condition: service_healthy }, redis: { condition: service_started } }
+volumes:
+  pgdata:
